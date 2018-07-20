@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div id='container'>
+        <a href="/logout">Logout</a>
+        <br>
+        <table class="table table-striped table-dark">
+            My Wish List:
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Added by</th>
+                    <th scope="col">Date Added</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for i in items %}
+                <tr>
+                    <form action='wish_items' method='post'>
+                        {% csrf_token %}
+                        <th scope="row"></th>
+                        <td><Button type="submit" class="btn btn-link" name='item_caller'>{{i.name}}</Button></td>
+                        <td>{{i.created_by}}</td>
+                        <td>{{i.created_at}}</td>
+                        <input type="hidden" name="item" value="shirt">
+                        {% if added_by == request.session.user_id %}
+                            <td><a href="/delete">Delete</a></td>
+                        {% else %}
+                            <td><a href="/remove">Remove to my Wishlist</a></td>
+                        {% endif %}
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table class="table table-striped table-dark">
+                Others wish List:
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Added by</th>
+                        <th scope="col">Date Added</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in items %}
+                    <tr>
+                        <form action='wish_items' method='post'>
+                            {% csrf_token %}
+                            <th scope="row"></th>
+                            <td><Button type="submit" class="btn btn-link">{{i.name}}</Button></td>
+                            <td>{{i.created_by}}</td>
+                            <td>{{i.created_at}}</td>
+                            <input type="hidden" name="item" value="shirt">
+                            <td><a href="/add">Add to Wishlist</a></td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    <form action='/create' method='POST'>
+        {% csrf_token %}
+        <Button type="submit" class="btn btn-link" value="Add Item">Add Item</Button>                
+</body>
+</html>
